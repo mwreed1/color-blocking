@@ -74,13 +74,31 @@ public static ArrayList<int[]> findCentroids(ArrayList<ArrayList<Integer>> clust
     return(centroids);
 }
 
+public static double findChange(ArrayList<int[]> oldCents, ArrayList<int[]> newCents){
+    int k = oldCents.size();
+    double total = 0;
+    for(int i = 0; i < k; i++){
+        int[] c1 = oldCents.get(i);
+        int[] c2 = newCents.get(i);
+        total += d.distance(c1, c2);
+    }
+    return(total/k);
+}
+
 public static int[][] kmeans(int k, ArrayList<int[]> pixelArray, int it){
     ArrayList<int[]> cents = initCent(pixelArray, k);
     ArrayList<ArrayList<Integer>> clusters = new ArrayList<>();
     int[][] ret = new int[pixelArray.size()][3];
-    for(int i = 0; i < it; i ++){
+    double dist = 1000000;
+    // for(int i = 0; i < it; i ++){
+    //     clusters = voronoi(pixelArray, k, cents);
+    //     cents = findCentroids(clusters, k, pixelArray);
+    // }
+    while(it < dist){
+        ArrayList<int[]> oldCents = new ArrayList<int[]>(cents);
         clusters = voronoi(pixelArray, k, cents);
         cents = findCentroids(clusters, k, pixelArray);
+        dist = findChange(oldCents, cents);
     }
     for(int j = 0; j < cents.size(); j++){
         ArrayList<Integer> l1 = new ArrayList<Integer>();

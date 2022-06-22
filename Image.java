@@ -41,10 +41,21 @@ public class Image {
     return(pixelArray);
 }
 
-public static void makeImage(int[][] pixels, int[] dim) throws IOException{
+public static void makeImage(int k, int it, String fileName) throws IOException{
+/**
+ * Creates a replica image that uses a specified number of colors
+ *
+ * @param {Integer} k The number of colors in your palette
+ * @param {Integer} it The threshold maximum for which the colors should 
+ *                      change in each iteration
+ * @param {String} fileName The name of the file containing the original image
+ */
+    int[] dim = getDim(fileName);
     int h = dim[0];
     int w = dim[1];
     BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+    Pixels p = new Pixels();
+    int[][] pixels = p.kmeans(k, getArray(fileName), it);
     for(int i = 0; i < h; i++){
         for(int j = 0; j < w; j++){
             int place = i*w + j;
@@ -59,9 +70,8 @@ public static void makeImage(int[][] pixels, int[] dim) throws IOException{
 
   public static void main(String[] args){
     try{
-        Pixels p = new Pixels();
-        int[][] pixels = p.kmeans(256, getArray("images/flower.jpeg"), 10);
-        makeImage(pixels, getDim("images/flower.jpeg"));
+        // change variables here
+        makeImage(256, 30, "images/flower.jpeg");
     }
     catch(IOException ex){
     }
